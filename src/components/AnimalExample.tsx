@@ -1,29 +1,34 @@
 import { fetchDog} from '@/api/animalApi'
 import {withAsync} from '@/helpers/withAsync'
 import {useState, useEffect} from 'react'
+import {
+  IDLE, 
+  PENDING, 
+  SUCCESS, 
+  ERROR, 
+  ApiStatus
+} from '@/constants/apiStatus'
 
-
-type ApiStatus = 'IDDLE' | 'PENDING' | 'SUCCESS' | 'ERROR'
 
 
 const useFetchDog = () => {
 
   const [dog, setDog] = useState<string>()
-  const [fetchDogStatus, setFetchDogStatus] = useState<ApiStatus>('IDDLE')
+  const [fetchDogStatus, setFetchDogStatus] = useState<ApiStatus>(IDLE)
 
   
   
 const initFetchDog = async () => {
     
     
-      setFetchDogStatus('PENDING')
+      setFetchDogStatus(PENDING)
        const { response, error } = await withAsync(() => fetchDog()) 
        if(error){
-          setFetchDogStatus('ERROR')
+          setFetchDogStatus(ERROR)
 
        }else if(response){
          setDog(response.data.message)
-         setFetchDogStatus('SUCCESS')
+         setFetchDogStatus(SUCCESS)
     
        }
      
@@ -87,10 +92,10 @@ function AnimalExample() {
         <div className='flex justify-center gap-8'>
         
 
-          {fetchDogStatus === 'IDDLE' ? <p>Welcome</p> : null}
-          {fetchDogStatus === 'PENDING' ? <p>Fetching Data</p> : null}
-          {fetchDogStatus === 'ERROR' ? <p>Something went wrong</p> : null}
-          {fetchDogStatus === 'SUCCESS' ? 
+          {fetchDogStatus === IDLE ? <p>Welcome</p> : null}
+          {fetchDogStatus === PENDING ? <p>Fetching Data</p> : null}
+          {fetchDogStatus === ERROR ? <p>Something went wrong</p> : null}
+          {fetchDogStatus === SUCCESS ? 
             (<img className="h-64 w-full object-cover" src={dog} alt="Dog"/>): null
           }
         </div>

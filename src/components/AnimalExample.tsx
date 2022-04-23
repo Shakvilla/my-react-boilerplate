@@ -8,6 +8,7 @@ import {
   ERROR, 
 } from '@/constants/apiStatus'
 import { useApiStatus} from '@/hooks/useApiStatus'
+import LoadingSpinner from './common/LoadingSpinner'
 
 
 
@@ -78,7 +79,8 @@ function AnimalExample() {
         
 
           {isFetchDogStatusIdle ? <p>Welcome</p> : null}
-          {isFetchDogStatusPending ? <p>Fetching Data</p> : null}
+          {<LoadingSpinner show={isFetchDogStatusPending} delay={400}/>}
+          {/* { ? <p>Fetching Data</p> : null} */}
           {isFetchDogStatusError ? <p>Something went wrong</p> : null}
           {isFetchDogStatusSuccess ? 
             (<img className="h-64 w-full object-cover" src={dog} alt="Dog"/>): null

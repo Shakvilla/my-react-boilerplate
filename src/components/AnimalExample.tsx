@@ -6,17 +6,23 @@ import {
   PENDING, 
   SUCCESS, 
   ERROR, 
-  ApiStatus
 } from '@/constants/apiStatus'
+import { useApiStatus} from '@/hooks/useApiStatus'
 
 
 
 const useFetchDog = () => {
 
   const [dog, setDog] = useState<string>()
-  const [fetchDogStatus, setFetchDogStatus] = useState<ApiStatus>(IDLE)
-
-  
+  // const [fetchDogStatus, setFetchDogStatus] = useState<ApiStatus>(IDLE)
+  const {
+    status: fetchDogStatus,
+    setStatus: setFetchDogStatus,
+    isIdle: isFetchDogStatusIdle,
+    isPending: isFetchDogStatusPending,
+    isError : isFetchDogStatusError,
+    isSuccess : isFetchDogStatusSuccess
+  } = useApiStatus(IDLE)
   
 const initFetchDog = async () => {
     
@@ -39,48 +45,27 @@ const initFetchDog = async () => {
   return {
     dog, 
     initFetchDog,
-    fetchDogStatus
+    fetchDogStatus,
+    isFetchDogStatusSuccess,
+    isFetchDogStatusError,
+    isFetchDogStatusPending,
+    isFetchDogStatusIdle
   }
 }
 
-// const useFetchCat = () => {
-
-//   const [cat, setCat] = useState<string>()
-
-//   const initFetchCat = async () => {
-//     const response = await fetchCat();
-
-//     setCat(response.data?.[0].url)
-//   }
-
-//   return {
-//     cat, initFetchCat
-//   }
-// }
-
-// const useFetchAnimals = () => {
-  
-//   const {dog, initFetchDog} = useFetchDog()
-//   // const {cat, initFetchCat} = useFetchCat()
-
-
-//   const fetchAnimals = () => {
-//     initFetchDog()
-//     // initFetchCat()
-//   }
-
-//   useEffect(() => {
-//     fetchAnimals()
-//   }, [])
-
-
-//   return {dog, fetchAnimals}
-// }
 
 
 function AnimalExample() {
 
-  const { dog, fetchDogStatus, initFetchDog } = useFetchDog()
+  const { 
+    dog, 
+    fetchDogStatus, 
+    initFetchDog,
+    isFetchDogStatusIdle,
+    isFetchDogStatusPending,
+    isFetchDogStatusError,
+    isFetchDogStatusSuccess,
+  } = useFetchDog()
 
   useEffect(() => {
     initFetchDog()
@@ -92,10 +77,10 @@ function AnimalExample() {
         <div className='flex justify-center gap-8'>
         
 
-          {fetchDogStatus === IDLE ? <p>Welcome</p> : null}
-          {fetchDogStatus === PENDING ? <p>Fetching Data</p> : null}
-          {fetchDogStatus === ERROR ? <p>Something went wrong</p> : null}
-          {fetchDogStatus === SUCCESS ? 
+          {isFetchDogStatusIdle ? <p>Welcome</p> : null}
+          {isFetchDogStatusPending ? <p>Fetching Data</p> : null}
+          {isFetchDogStatusError ? <p>Something went wrong</p> : null}
+          {isFetchDogStatusSuccess ? 
             (<img className="h-64 w-full object-cover" src={dog} alt="Dog"/>): null
           }
         </div>

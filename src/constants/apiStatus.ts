@@ -7,7 +7,7 @@ export const SUCCESS: ApiStatus = 'SUCCESS'
 export const ERROR: ApiStatus = 'ERROR'
 
 
-export const defaultApiStatus: ApiStatus[] = [
+export const defaultApiStatuses: ApiStatus[] = [
   'IDLE',
   'PENDING',
   'SUCCESS',
